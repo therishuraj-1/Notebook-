@@ -1,16 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Notebook, X } from 'lucide-react';
 
 const App = () => {
 
 const [ heading, setHeading]=useState("")
 const [ details, setDetails]=useState("")
-const [task,setTask]=useState([])
-
-useEffect( ()=>{
-  const savedat=JSON.parse(localStorage.getItem("data")) || [];
- setTask(savedat)
-},[setTask])
+const [task,setTask]=useState(()=>{const savedata=localStorage.getItem("data")
+ try {
+  return savedata ?
+  JSON.parse(savedata) : [];}
+  catch (error){console.error("invalid json in localStorage:",error)
+    return [];
+  }
+  
+})
+;
 
 const addNote= (elem)=> {
   elem.preventDefault()
@@ -24,14 +28,13 @@ const addNote= (elem)=> {
     setHeading("")
     setDetails("")
     
-    const data =localStorage.setItem("data",JSON.stringify(task) );
-    
+    localStorage.setItem("data",JSON.stringify(uptask) );
 }
  const dltnot=(idx)=>{
    const newNote =[...task]
    newNote.splice(idx,1)
    setTask(newNote);
-   localStorage.setItem("data",JSON.stringify(setTask));
+   localStorage.setItem("data",JSON.stringify(newNote));
 
  }
  
